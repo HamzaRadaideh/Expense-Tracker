@@ -1,0 +1,9 @@
+﻿@model Expense_Tracker.Models.Account.AccountDTO.LoginDTO
+
+<form asp-action="Login" method="post">
+    <label>Email</label>
+    <input asp-for="Email" />
+    <label>Password</label>
+    <input asp-for="Password" type="password" />
+    <button type="submit">Login</button>
+</form>

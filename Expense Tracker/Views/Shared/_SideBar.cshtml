@@ -1,0 +1,130 @@
+﻿@{
+    List<Object> menuItems = new List<Object>();
+
+    menuItems.Add(new
+    {
+        text = "General",
+        separator = true,
+    });
+    menuItems.Add(new
+    {
+        text = "Dashboard",
+        url = "/",
+        iconCss = "fa-solid fa-box",
+    });
+    menuItems.Add(new
+    {
+        text = "Categories",
+        url = "/Category",
+        iconCss = "fa-solid fa-folder-closed",
+    });
+    menuItems.Add(new
+    {
+        text = "Transactions",
+        url = "/Transaction",
+        iconCss = "fa-solid fa-arrow-right-arrow-left",
+    });
+
+    menuItems.Add(new
+    {
+        text = "Extras",
+        separator = true,
+    });
+    menuItems.Add(new
+    {
+        text = "Settings",
+        iconCss = "fa-solid fa-gear",
+        url = "/Settings" // Updated URL
+    });
+
+
+    bool isUserLoggedIn = Context.Request.Cookies.ContainsKey(".AspNetCore.Cookies");
+
+    if (isUserLoggedIn)
+    {
+        // Logout item
+        menuItems.Add(new
+        {
+            text = "Logout",
+            url = "/Account/Logout",
+            iconCss = "fa-solid fa-sign-out-alt",
+        });
+    }
+    else
+    {
+        // Login and Register items
+        menuItems.Add(new
+        {
+            text = "Login",
+            url = "/Account/Login",
+            iconCss = "fa-solid fa-sign-in-alt",
+        });
+        menuItems.Add(new
+        {
+            text = "Register",
+            url = "/Account/Register",
+            iconCss = "fa-solid fa-user-plus",
+        });
+    }
+
+    // Retrieve user's full name from claims
+    var userFullName = User.Identity.IsAuthenticated
+        ? User.FindFirst("FullName")?.Value ?? "User"  // Fallback to "User" if FullName claim is not available
+        : "Guest";
+}
+
+<ejs-sidebar id="sidebar" width="290px" enableDock dockSize="100px"
+             target=".dock-target" enableGestures="false">
+    <e-content-template>
+
+        <div class="logo-wrapper">
+            <div class="app-logo">
+                <img src="~/logo.png" />
+            </div>
+            <div class="w-100"></div>
+            <i id="sidebar-toggler" class="fa-solid"></i>
+        </div>
+
+        <div class="profile-wrapper">
+            <img class="profile-pic" src="~/profile.jpg" />
+            <div class="titles d-flex flex-column ps-3">
+                <h6 class="mb-0">@userFullName</h6>
+            </div>
+        </div>
+
+        <!-- Main Menu with Login/Register/Logout -->
+        <ejs-menu id="menu"
+                  items="menuItems"
+                  orientation="Vertical"
+                  hamburgerMode></ejs-menu>
+    </e-content-template>
+</ejs-sidebar>
+
+<script>
+    document.addEventListener('DOMContentLoaded',  function () {
+        dockBar = document.getElementById('sidebar').ej2_instances[0];
+        document.getElementById('sidebar-toggler').onclick = function () {
+            dockBar.toggle();
+        };
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const logoutLink = document.querySelector('a[href="/Account/Logout"]');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Create a form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/Account/Logout';
+
+                // Append and submit the form
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+    });
+</script>

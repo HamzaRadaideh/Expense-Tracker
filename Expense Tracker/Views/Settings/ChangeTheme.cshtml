@@ -1,0 +1,18 @@
+﻿@model Expense_Tracker.Models.Settings.Theme
+
+<h2>Change Theme</h2>
+
+<form asp-action="SaveTheme" method="post">
+    <div class="form-group">
+        <label>Select Theme</label>
+        <div class="form-check">
+            <input asp-for="IsDarkTheme" class="form-check-input" type="radio" value="true" id="darkThemeOption">
+            <label class="form-check-label" for="darkThemeOption">Dark Mode</label>
+        </div>
+        <div class="form-check">
+            <input asp-for="IsDarkTheme" class="form-check-input" type="radio" value="false" id="lightThemeOption">
+            <label class="form-check-label" for="lightThemeOption">Light Mode</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+</form>

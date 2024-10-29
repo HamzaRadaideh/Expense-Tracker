@@ -1,0 +1,15 @@
+﻿@model Expense_Tracker.Models.Account.AccountDTO.RegisterDTO
+
+<form asp-action="Register" method="post">
+    <label>First Name</label>
+    <input asp-for="FirstName" />
+    <label>Last Name</label>
+    <input asp-for="LastName" />
+    <label>Email</label>
+    <input asp-for="Email" />
+    <label>Password</label>
+    <input asp-for="Password" type="password" />
+    <label>Confirm Password</label>
+    <input asp-for="ConfirmPassword" type="password" />
+    <button type="submit">Register</button>
+</form>
