@@ -1,3 +1,4 @@
+using Expense_Tracker.Hubs;
 using Expense_Tracker.Models;
 using Expense_Tracker.Models.Account;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register SignalR services
+builder.Services.AddSignalR();
 
 // Dependency Injection (DI) for DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -45,8 +49,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chathub");
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+});
 
 app.Run();

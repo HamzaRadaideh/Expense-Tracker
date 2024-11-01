@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Expense_Tracker.Models.Chat.FriendRequest>
+
+@{
+    ViewData["Title"] = "Pending Friend Requests";
+}
+
+<h2>Pending Friend Requests</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Requester</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.RequesterId</td> <!-- Replace with Requester name if available -->
+                <td>
+                    <form asp-action="RespondToFriendRequest" method="post">
+                        <input type="hidden" name="requestId" value="@request.FriendRequestId" />
+                        <button type="submit" name="response" value="Accept">Accept</button>
+                        <button type="submit" name="response" value="Deny">Deny</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

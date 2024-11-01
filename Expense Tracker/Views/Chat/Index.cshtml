@@ -1,0 +1,19 @@
+﻿@using System.Security.Claims
+@{
+    ViewData["Title"] = "Chat";
+    var friendId = ViewBag.FriendId;
+}
+
+<div id="app"></div>
+
+@section Scripts {
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/Chat.js"></script>
+    <script>
+                // Pass the FriendId and CurrentUserId as global variables for use in Chat.js
+                window.chatConfig = {
+            friendId: "@(ViewBag.FriendId)",
+                    currentUserId: "@(User.FindFirst(ClaimTypes.NameIdentifier)?.Value)"
+        };
+    </script>
+}

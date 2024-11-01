@@ -3,14 +3,14 @@
 
     menuItems.Add(new
     {
-        text = "General",
-        separator = true,
-    });
-    menuItems.Add(new
-    {
         text = "Dashboard",
         url = "/",
         iconCss = "fa-solid fa-box",
+    });
+    menuItems.Add(new
+    {
+        text = "General",
+        separator = true,
     });
     menuItems.Add(new
     {
@@ -34,15 +34,42 @@
     {
         text = "Settings",
         iconCss = "fa-solid fa-gear",
-        url = "/Settings" // Updated URL
+        url = "/Settings"
     });
 
+    menuItems.Add(new
+    {
+        text = "Chat",
+        separator = true,
+    });
+    menuItems.Add(new
+    {
+        text = "Find a Friend",
+        url = "/Friend/AddFriend",
+        iconCss = "fa-solid fa-user-plus",
+    });
+    menuItems.Add(new
+    {
+        text = "Pending Requests",
+        url = "/Friend/GetPendingRequests",
+        iconCss = "fa-solid fa-envelope",
+    });
+    menuItems.Add(new
+    {
+        text = "Chats",
+        url = "/Friend/Chats",
+        iconCss = "fa-solid fa-comments",
+    });
+    menuItems.Add(new
+    {
+        text = "Auth",
+        separator = true,
+    });
 
     bool isUserLoggedIn = Context.Request.Cookies.ContainsKey(".AspNetCore.Cookies");
 
     if (isUserLoggedIn)
     {
-        // Logout item
         menuItems.Add(new
         {
             text = "Logout",
@@ -52,7 +79,6 @@
     }
     else
     {
-        // Login and Register items
         menuItems.Add(new
         {
             text = "Login",
@@ -67,9 +93,8 @@
         });
     }
 
-    // Retrieve user's full name from claims
     var userFullName = User.Identity.IsAuthenticated
-        ? User.FindFirst("FullName")?.Value ?? "User"  // Fallback to "User" if FullName claim is not available
+        ? User.FindFirst("FullName")?.Value ?? "User"
         : "Guest";
 }
 
@@ -101,7 +126,7 @@
 </ejs-sidebar>
 
 <script>
-    document.addEventListener('DOMContentLoaded',  function () {
+    document.addEventListener('DOMContentLoaded', function () {
         dockBar = document.getElementById('sidebar').ej2_instances[0];
         document.getElementById('sidebar-toggler').onclick = function () {
             dockBar.toggle();

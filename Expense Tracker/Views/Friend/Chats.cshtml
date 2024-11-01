@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Expense_Tracker.Models.Account.User>
+
+@{
+    ViewData["Title"] = "Chats";
+}
+
+<h2>Chats</h2>
+<ul>
+    @foreach (var friend in Model)
+    {
+        <li>
+            <a href="@Url.Action("Index", "Chat", new { friendId = friend.Id })">
+                Chat with @friend.FirstName @friend.LastName
+            </a>
+        </li>
+    }
+</ul>

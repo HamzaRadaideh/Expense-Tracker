@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Expense_Tracker.Models.Chat.UserViewModel>
+
+@if (!Model.Any())
+{
+    <p>No users found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var user in Model)
+        {
+            <li>
+                @user.FullName
+                <form asp-action="SendFriendRequest" method="post" style="display:inline;">
+                    <input type="hidden" name="receiverId" value="@user.Id" />
+                    <button type="submit">Send Friend Request</button>
+                </form>
+            </li>
+        }
+    </ul>
+}

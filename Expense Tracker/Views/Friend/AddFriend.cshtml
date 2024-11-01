@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Find a Friend";
+}
+
+<h2>Find a Friend</h2>
+
+<div>
+    <input type="text" id="searchQuery" placeholder="Enter full name" oninput="searchUsers()" required />
+    <div id="searchResults"></div>
+</div>
+
+@section Scripts {
+    <script>
+        async function searchUsers() {
+            const query = document.getElementById("searchQuery").value;
+            if (query.trim() === "") {
+                document.getElementById("searchResults").innerHTML = "";
+                return;
+            }
+
+            const response = await fetch(`/Friend/Search?searchQuery=${encodeURIComponent(query)}`);
+            if (response.ok) {
+                const html = await response.text();
+                document.getElementById("searchResults").innerHTML = html;
+            } else {
+                document.getElementById("searchResults").innerHTML = "<p>No users found.</p>";
+            }
+        }
+    </script>
+}
