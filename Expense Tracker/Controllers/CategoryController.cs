@@ -61,6 +61,8 @@ namespace Expense_Tracker.Controllers
                 // New category, set UserId directly
                 category.UserId = userId;  // Using UserId from cookie claim
                 context.Add(category);
+                TempData["ToastType"] = "success";
+                TempData["ToastMessage"] = "Category Created successfully!";
             }
             else
             {
@@ -79,6 +81,8 @@ namespace Expense_Tracker.Controllers
                 existingCategory.Type = category.Type;
 
                 context.Update(existingCategory);
+                TempData["ToastType"] = "info";
+                TempData["ToastMessage"] = "Category Updated successfully!";
             }
 
             await context.SaveChangesAsync();
@@ -101,7 +105,12 @@ namespace Expense_Tracker.Controllers
 
             context.Categories.Remove(category);
             await context.SaveChangesAsync();
+
+            TempData["ToastType"] = "error";
+            TempData["ToastMessage"] = "Category deleted successfully!";
+
             return RedirectToAction(nameof(Index));
+
         }
     }
 }

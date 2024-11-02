@@ -71,6 +71,8 @@ namespace Expense_Tracker.Controllers
 
             Json(new { success = true, message = "Friend request sent successfully." });
 
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Friend request sent successfully.";
             return RedirectToAction("AddFriend", "Friend");
         }
 
@@ -107,14 +109,23 @@ namespace Expense_Tracker.Controllers
                     UserId1 = Math.Min(request.RequesterId, request.ReceiverId),
                     UserId2 = Math.Max(request.RequesterId, request.ReceiverId)
                 };
+
+                TempData["ToastType"] = "success";
+                TempData["ToastMessage"] = "Friend request Accepted successfully.";
+
                 context.UserFriends.Add(friendship);
             }
             else if (response == "Deny")
             {
                 request.Status = "Denied";
+
+                TempData["ToastType"] = "success";
+                TempData["ToastMessage"] = "Friend request Denied successfully.";
             }
             else
             {
+                TempData["ToastType"] = "error";
+                TempData["ToastMessage"] = "Invalid response.";
                 return BadRequest("Invalid response.");
             }
 
@@ -132,11 +143,16 @@ namespace Expense_Tracker.Controllers
 
             if (friendship == null)
             {
+                TempData["ToastType"] = "Error";
+                TempData["ToastMessage"] = "Friendship not found.";
                 return NotFound("Friendship not found.");
             }
 
             context.UserFriends.Remove(friendship);
             await context.SaveChangesAsync();
+
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Friend removed. successfully.";
 
             return Ok("Friend removed.");
         }

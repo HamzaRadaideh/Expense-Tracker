@@ -119,9 +119,40 @@
         displayMessage(senderUserId, senderFullName, message);
     });
 
+    // Error message event listener
     connection.on("ErrorMessage", (error) => {
         alert(error);
         console.error("Error message received:", error);
+    });
+
+    // Function to display a toast notification
+    function displayToastNotification(title, message) {
+        const notification = document.createElement("div");
+        notification.className = "toast-notification";
+        notification.innerHTML = `<strong>${title}</strong><p>${message}</p>`;
+
+        // Apply toast notification styles
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s;
+        `;
+
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 5000); // Auto-dismiss after 5 seconds
+    }
+
+    // Real-time notification for new messages
+    connection.on("ShowNotification", (title, message) => {
+        displayToastNotification(title, message);
     });
 
     // Send message function
@@ -151,11 +182,25 @@
         }
     });
 
+    // Set the active chat when the user opens a chat with a friend
+    function setActiveChat() {
+        connection.invoke("SetActiveChat", friendId).catch(err => console.error(err.toString()));
+    }
+
+    // Clear the active chat when the user closes the chat or navigates away
+    function clearActiveChat() {
+        connection.invoke("ClearActiveChat").catch(err => console.error(err.toString()));
+    }
+
+    // Call setActiveChat when the chat opens, and clearActiveChat when it closes
+    setActiveChat(); // Set active chat initially
+    window.addEventListener("beforeunload", clearActiveChat); // Clear on page unload
+
     // Load chat history and establish connection
     connection.start()
         .then(async () => {
             isConnected = true;
-            await connection.invoke("LoadChatHistory", friendId);
+            await loadChatHistory();
         })
         .catch(err => console.error("Error while starting SignalR connection:", err));
 
@@ -166,6 +211,4 @@
             displayMessage(msg.SenderId, msg.SenderFullName, msg.Content);
         });
     }
-
-    loadChatHistory();
 });

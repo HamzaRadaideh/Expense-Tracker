@@ -27,6 +27,14 @@
 
     menuItems.Add(new
     {
+        text = "Notifications",
+        url = "/Notifications",
+        iconCss = "fa-solid fa-bell",
+        badge = "New" // Placeholder badge, replaced by dynamic JS later
+    });
+
+    menuItems.Add(new
+    {
         text = "Extras",
         separator = true,
     });
@@ -131,6 +139,23 @@
         document.getElementById('sidebar-toggler').onclick = function () {
             dockBar.toggle();
         };
+
+        // Check for unread notifications and update badge
+        fetch('/Notifications/GetUnreadCount')
+            .then(response => response.json())
+            .then(data => {
+                if (data.unreadCount > 0) {
+                    const notificationMenuItem = document.querySelector('a[href="/Notifications"]');
+                    if (notificationMenuItem) {
+                        // Add badge with unread count
+                        const badge = document.createElement('span');
+                        badge.className = 'badge bg-danger ms-2';
+                        badge.textContent = data.unreadCount;
+                        notificationMenuItem.appendChild(badge);
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching unread notifications:', error));
     });
 </script>
 

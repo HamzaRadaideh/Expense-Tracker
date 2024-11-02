@@ -41,7 +41,11 @@ namespace Expense_Tracker.Controllers
             await context.SaveChangesAsync();
 
             await SignInUser(user);
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Registered successfully!";
             return RedirectToAction("Index", "Dashboard");
+
+
         }
 
         [HttpGet]
@@ -65,8 +69,11 @@ namespace Expense_Tracker.Controllers
 
             // Use the SignInUser method to sign in the user
             await SignInUser(user);
-
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Loged In successfully!";
             return RedirectToAction("Index", "Dashboard");
+
+
         }
 
 
@@ -74,6 +81,8 @@ namespace Expense_Tracker.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Loged Out successfully!";
             return RedirectToAction("Index", "Dashboard");
         }
 

@@ -50,13 +50,22 @@ public class SettingsController : Controller
             // Update the claims in the current session
             await UpdateUserClaimsName(user.FirstName, user.LastName);
 
+
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Name updated successfully!";
+
             TempData["SuccessMessage"] = "Name updated successfully!";
             return RedirectToAction("Index");
         }
 
+        TempData["ToastType"] = "Error";
+        TempData["ToastMessage"] = "User not found.";
+
         TempData["ErrorMessage"] = "User not found.";
         return View("ChangeName", model);
     }
+
+
 
 
     [HttpPost]
@@ -75,14 +84,19 @@ public class SettingsController : Controller
             // Update the email claim in the current session
             await UpdateUserClaimsEmail(user.Email);
 
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Email updated successfully!";
+
             TempData["SuccessMessage"] = "Email updated successfully!";
             return RedirectToAction("Index");
         }
 
+        TempData["ToastType"] = "Error";
+        TempData["ToastMessage"] = "User not found.";
+
         TempData["ErrorMessage"] = "User not found.";
         return View("ChangeEmail", model);
     }
-
 
     // Save Password
     [HttpPost]
@@ -106,9 +120,16 @@ public class SettingsController : Controller
             // Hash and set new password
             user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
             await _context.SaveChangesAsync();
+
+            TempData["ToastType"] = "success";
+            TempData["ToastMessage"] = "Password updated successfully!";
+
             TempData["SuccessMessage"] = "Password updated successfully!";
             return RedirectToAction("Index");
         }
+
+        TempData["ToastType"] = "Error";
+        TempData["ToastMessage"] = "User not found.";
 
         TempData["ErrorMessage"] = "User not found.";
         return View("ChangePassword", model);
@@ -138,6 +159,10 @@ public class SettingsController : Controller
         }
 
         await _context.SaveChangesAsync();
+
+        TempData["ToastType"] = "success";
+        TempData["ToastMessage"] = "Theme updated successfully!";
+
         TempData["SuccessMessage"] = "Theme updated successfully!";
         return RedirectToAction("Index");
     }
@@ -181,6 +206,5 @@ public class SettingsController : Controller
         await HttpContext.SignOutAsync();
         await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
     }
-
 
 }

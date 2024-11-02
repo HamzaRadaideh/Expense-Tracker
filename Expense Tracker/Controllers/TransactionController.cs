@@ -67,8 +67,10 @@ namespace Expense_Tracker.Controllers
             if (transaction.TransactionId == 0)
             {
                 // New transaction, set UserId directly
-                transaction.UserId = userId;  // Using UserId from cookie claim
+                transaction.UserId = userId;
                 _context.Add(transaction);
+                TempData["ToastType"] = "success";
+                TempData["ToastMessage"] = "Transaction Created successfully!";
             }
             else
             {
@@ -86,12 +88,14 @@ namespace Expense_Tracker.Controllers
                 existingTransaction.Date = transaction.Date;
 
                 _context.Update(existingTransaction);
+
+                TempData["ToastType"] = "info";
+                TempData["ToastMessage"] = "Transaction Updated successfully!";
             }
 
             PopulateCategories();
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-
         }
 
         // POST: Transaction/Delete/5
@@ -108,6 +112,10 @@ namespace Expense_Tracker.Controllers
 
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
+
+            TempData["ToastType"] = "error";
+            TempData["ToastMessage"] = "Transaction deleted successfully!";
+
             return RedirectToAction(nameof(Index));
         }
 

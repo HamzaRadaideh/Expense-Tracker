@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Expense_Tracker.Models.Chat.Notification>
+
+<h2>Notifications</h2>
+
+@foreach (var notification in Model)
+{
+    <div class="notification-card">
+        <p>@notification.Message</p>
+        <small>@notification.Timestamp.ToString("g")</small>
+        <form asp-action="MarkAsRead" method="post">
+            <input type="hidden" name="notificationId" value="@notification.NotificationId" />
+            <button type="submit" class="btn btn-sm btn-secondary" @(notification.IsRead ? "disabled" : "")>
+                Mark as Read
+            </button>
+        </form>
+    </div>
+}
